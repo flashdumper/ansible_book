@@ -62,10 +62,13 @@
   - name: Make sure that ssh service has enabled password based access
     lineinfile:
       path: /etc/ssh/sshd_config
-      line: 'PasswordAuthentication yes'
-      regexp: '^\s*PasswordAuthentication\s+.*$'
+      line: '{{ item.to }}'
+      regexp: '{{ item.what }}'
       validate: '/usr/sbin/sshd -t -f %s'
       state: present
+    with_items:
+    - { what: '^\s*PasswordAuthentication\s+.*$', to: 'PasswordAuthentication yes' }
+    - { what: '^PermitRootLogin\s+.*$', to: 'PermitRootLogin no' }
     notify: 
     - Reload SSH
 
