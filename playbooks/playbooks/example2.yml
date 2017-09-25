@@ -1,10 +1,28 @@
 - hosts: web_servers,loadbalancer
   become: true
-  gather_facts: yes
+  gather_facts: true
   tasks:
 
   - name: Set hostname
     hostname: name='{{ inventory_hostname }}'
+
+  
+  - name: Set an interface that is connected to a shared network (CentOS)
+    set_fact: net_if='eth1'
+    when: ansible_os_family == 'RedHat'
+
+
+  - name: Set an interface that is connected to a shared network (Ubuntu)
+    set_fact: net_if='enp0s8'
+    when: ansible_os_family == 'Debian'
+
+
+  - name: Update /etc/hosts
+    lineinfile:
+      path: /etc/hosts
+      regexp: '^.*{{ item }}.*$'
+      line: '{{ hostvars[item]["ansible_" + hostvars[item].net_if].ipv4.address }} {{ item }}'
+    with_items: "{{ groups['loadbalancer'] + groups['web_servers'] }}"
 
 
   - name: Create group devusers
@@ -103,28 +121,30 @@
           worker_connections 1024;
         }
         http {
+        {% if inventory_hostname in groups['loadbalancer'] %}
           upstream backend {
         {% for backend in groups['web_servers'] %}
             server {{ backend }};
         {% endfor %}
           }
+        {% endif %}
           server {
             listen 80 default_server;
             server_name _;
-            location / {
-              index index.html;
+         {% if inventory_hostname in groups['loadbalancer'] %}
+            location = /index.html {
+              proxy_pass http://backend;
+            }
+            location = /about.html {
               root {{ webroot }};
             }
-        {% for backend in groups['web_servers'] if inventory_hostname in groups['loadbalancer'] %}
-            location = /{{ backend }}/about.html$ {
-              proxy_pass http://backend/about.html;
+         {% elif inventory_hostname in groups['web_servers'] %}
+            location / {
+              root {{ webroot }};
             }
-            location = /{{ backend }}/index.html$ {
-              proxy_pass http://backend/index.html;
-            }
-        {% endfor %}
+         {% endif %}
           }
-        }
+         }
       dest: /etc/nginx/nginx.conf
       mode: '0644'
       owner: 'root'
@@ -149,6 +169,11 @@
     when: inventory_hostname in groups['web_servers']
 
 
+  - name: Disabling SELinux on CentOS 
+    selinux: state=disabled
+    when: ansible_os_family == 'RedHat'
+
+
   - name: Make sure Nginx is autostartable and running now
     service: name=nginx enabled=on state=started 
 
@@ -159,6 +184,4 @@
 
   - name: Reload Nginx
     service: name='nginx' state=reloaded
-
-
 
