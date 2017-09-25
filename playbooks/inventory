@@ -1,0 +1,11 @@
+[web_servers]
+www1.example.com ansible_ssh_port=2222
+www2.example.com ansible_ssh_port=2200
+
+[web_servers:vars]
+ansible_host = 127.0.0.1
+ansible_user = vagrant
+
+[loadbalancer]
+lb.example.com  ansible_host=127.0.0.1 ansible_ssh_port=2201 ansible_user=ubuntu
+

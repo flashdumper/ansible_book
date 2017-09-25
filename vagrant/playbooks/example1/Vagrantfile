@@ -1,0 +1,10 @@
+Vagrant.configure(2) do |config|
+    config.vm.provision "file", source: "~/.ssh/id_rsa.pub", destination: "~/.ssh/authorized_keys"
+    config.vm.define "www.example.com" do |www|
+        www.vm.box = "centos/7"
+    end
+    config.vm.define "lb.example.com" do |lb|
+        lb.vm.box = "ubuntu/xenial64"
+    end
+end
+

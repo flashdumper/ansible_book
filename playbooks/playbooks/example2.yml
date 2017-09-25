@@ -1,0 +1,164 @@
+- hosts: web_servers,loadbalancer
+  become: true
+  gather_facts: yes
+  tasks:
+
+  - name: Set hostname
+    hostname: name='{{ inventory_hostname }}'
+
+
+  - name: Create group devusers
+    group: name='devusers' state=present gid=5055
+
+
+  # Creation of user for Ubuntu is done in two steps
+  # 1. making a hash of a required password
+  # 2. creating a user and passing to the user module the generated hash
+  - name: Running Ubuntu specific tasks
+    block:
+      - name: Installing mkpasswd utility
+        apt: name='whois' state=present
+    
+      - name: Making devops user password hash
+        shell: "echo 'Dev@U$er8' | mkpasswd --method=sha-512 --stdin"
+        register: devops_pwd
+
+      - name: Creating devops user with a password 
+        user: name='devops' uid=5055 group=devusers comment='Ansible automation user' password='{{ devops_pwd.stdout }}' state=present
+    when: ansible_os_family == 'Debian'
+
+
+  # Creating of user for CentOS system is done in two steps
+  # 1. creating a user by running the user module without provide a password hash
+  # 2. set up the user password by running 'echo 'SECRET' | passwd --stdin devops' command
+  - name: Running CentOS specific tasks
+    block:
+      - name: Making devops user without password
+        user: name='devops' uid=5055 group=devusers comment='Ansible automation user' state=present
+
+      - name: Set devops password
+        shell: "echo 'Dev@U$er8' | passwd --stdin devops"
+    when: ansible_os_family == 'RedHat'
+ 
+
+  - name: Make sure that ssh service has enabled password based access
+    lineinfile:
+      path: /etc/ssh/sshd_config
+      line: 'PasswordAuthentication yes'
+      regexp: '^\s*PasswordAuthentication\s+.*$'
+      validate: '/usr/sbin/sshd -t -f %s'
+      state: present
+    notify: 
+    - Reload SSH
+
+
+  - name: Granting sudo access
+    copy:
+      content: |
+        devops ALL=(ALL) NOPASSWD: ALL
+      dest: /etc/sudoers.d/devops
+      mode: '0400'
+      owner: root
+      group: root
+
+
+  - name: Running CentOS specific tasks
+    block:
+      - name: Installing epel-repository
+        yum: name=epel-release state=present
+  
+      - name: Installing Nginx package (CentOS)
+        yum: name=nginx state=present
+    when: ansible_os_family == 'RedHat'
+  
+
+  - name: Installing Nginx package (Ubuntu)
+    apt: name=nginx state=present
+    when: ansible_os_family == 'Debian'
+
+ 
+  - name: Defining the webroot variable (Ubuntu)
+    set_fact: webroot='/www_frontend'
+    when: inventory_hostname in groups['loadbalancer']
+
+  
+  - name: Defining the webroot variable (CentOS)
+    set_fact: webroot='/www_backend'
+    when: inventory_hostname in groups['web_servers']
+
+
+  - name: Creating the '{{ webroot }}' directory
+    file: 
+      path: '{{ webroot }}'
+      state: directory
+      mode: '0755'
+      owner: 'root'
+      group: 'root'
+
+
+  - name: Creating Nginx configuration file /etc/nginx/nginx.conf
+    copy:
+      content: |
+        events {
+          worker_connections 1024;
+        }
+        http {
+          upstream backend {
+        {% for backend in groups['web_servers'] %}
+            server {{ backend }};
+        {% endfor %}
+          }
+          server {
+            listen 80 default_server;
+            server_name _;
+            location / {
+              index index.html;
+              root {{ webroot }};
+            }
+        {% for backend in groups['web_servers'] if inventory_hostname in groups['loadbalancer'] %}
+            location = /{{ backend }}/about.html$ {
+              proxy_pass http://backend/about.html;
+            }
+            location = /{{ backend }}/index.html$ {
+              proxy_pass http://backend/index.html;
+            }
+        {% endfor %}
+          }
+        }
+      dest: /etc/nginx/nginx.conf
+      mode: '0644'
+      owner: 'root'
+      group: 'root'
+      validate: '/usr/sbin/nginx -t -c %s'
+    notify:
+    - Reload Nginx
+
+
+  - name: Creating '{{ webroot }}/about.html' file
+    copy:
+      content: |
+        This is {{ inventory_hostname }} server!
+      dest: '{{ webroot }}/about.html'
+
+
+  - name: Creating '{{ webroot }}/index.html' file
+    copy:
+      content: |
+        Hello, this is higly available website on {{ inventory_hostname }}
+      dest: '{{ webroot }}/index.html'
+    when: inventory_hostname in groups['web_servers']
+
+
+  - name: Make sure Nginx is autostartable and running now
+    service: name=nginx enabled=on state=started 
+
+
+  handlers:
+  - name: Reload SSH
+    service: name='sshd' state=reloaded
+
+  - name: Reload Nginx
+    service: name='nginx' state=reloaded
+
+
+
