@@ -1,5 +1,6 @@
 .vagrant/
 *.swp
+**/*.retry
 **/*.swp
 **/*.log
 

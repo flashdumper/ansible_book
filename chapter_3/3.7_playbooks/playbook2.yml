@@ -1,0 +1,19 @@
+- hosts: node1.example.com
+  become: yes
+  tasks:
+  
+  - name: Set a correct hostname
+    hostname: name='www.example.com'
+
+  - name: Create the /tmp/test.txt file
+    become: no
+    copy:
+        content: |
+            This file is made by an Ansible playbook.
+        dest: /tmp/test.txt
+
+  - name: Make sure firewall is stopped
+    service: 
+        name: firewalld
+        state: stopped
+

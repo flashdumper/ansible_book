@@ -1,0 +1,3 @@
+- include: playbook1.yml
+- include: playbook2.yml
+
