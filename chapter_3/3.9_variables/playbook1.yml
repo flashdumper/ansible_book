@@ -1,8 +1,8 @@
-- hosts: hode-1.example.com
+- hosts: node1.example.com
   become: yes
   vars:
-    new_hostname: node-1-new.example.com
+    new_hostname: node1-new.example.com
   tasks:
-    - name: Set new hostname to the node-1
+    - name: Set new hostname to the node1
       hostname: name='{{ new_hostname }}'
 

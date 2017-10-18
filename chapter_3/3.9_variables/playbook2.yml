@@ -1,0 +1,11 @@
+- hosts: all
+  become: yes
+  vars_files:
+    - vars1.yml
+  tasks:
+  - name: Creating the devops account
+    user: 
+      comment: '{{ devops_comment }}'
+      createhome: '{{ devops_createhome }}'
+      name: '{{ devops_login }}'
+

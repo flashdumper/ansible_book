@@ -1,0 +1,19 @@
+- hosts: node1.example.com
+  become: yes
+  tasks:
+    - name: Create users
+      user: name='{{ item }}'
+      with_items:
+      - user1
+      - user2
+      - user3
+
+- hosts: node1.example.com
+  become: yes
+  vars:
+    users: [ 'user1', 'user2', 'user3' ]
+  tasks:
+    - name: Create users
+      user: name='{{ item }}'
+      with_items: '{{ users }}'
+
