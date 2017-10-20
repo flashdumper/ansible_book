@@ -1,0 +1,3 @@
+[defaults]
+epel_package=epel-release
+

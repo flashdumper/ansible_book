@@ -1,0 +1,15 @@
+- hosts: node1.example.com
+  become: yes
+  gather_facts: yes
+  tasks:
+    - name: Defining a custom variable
+      set_fact: 
+        hostinfo: 'Host: {{ inventory_hostname }} / IPaddr: {{ ansible_eth0.ipv4.address }}'
+        other_var: 'MacAddr: {{ ansible_eth0.macaddress }}' 
+
+    - name: Printing hostinfo variable
+      debug: msg='{{ hostinfo }}'
+
+    - name: Printing other_var variable
+      debug: msg='{{ other_var }}'
+
