@@ -1,0 +1,23 @@
+- hosts: all
+  become: yes
+  tasks:
+
+    - name: Placing the Message Of Day file /etc/motd (the copy module)
+      copy:
+        content: |
+          Host Information
+          ----------------
+          Hostname           : {{ inventory_hostname }}
+          Distribution       : {{ ansible_distribution }}
+          OS Version         : {{ ansible_distribution_version }}
+          Kernel Version     : {{ ansible_kernel }}
+          Architecture       : {{ ansible_architecture }}
+          Primary IP Address : {{ ansible_default_ipv4.address }}
+          Memory Size        : {{ ansible_memory_mb.real.total }} MB total / {{ ansible_memory_mb.real.free }} MB free
+          Disk Drive         : {{ ansible_devices.sda.model }} / {{ ansible_devices.sda.size }}
+        dest: /etc/motd
+        owner: root
+        group: root
+        mode: o=rw,g=r,o=r
+
+
