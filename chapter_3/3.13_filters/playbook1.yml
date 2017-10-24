@@ -12,7 +12,7 @@
             5. An average value of two minimums {{ ([ 5, 3, 2, 6, 8 ]|min + [ 9, 17, 5, 3 ]|min)/2 }}
             6. Power of 5 by 5 is {{ 5 | pow(5) }}
             7. Test if a given string is an IP address 127.0.0.1 = {{ '127.0.0.1' | ipv4 }}
-            8. Getting a SHA1 hasum of 'Hello, World!' {{ 'Hello, World!' | hash('sha1') }}
+            8. Getting a SHA1 hashsum of 'Hello, World!' {{ 'Hello, World!' | hash('sha1') }}
             9. Combining a list of items into a string {{ ['', 'usr', 'share', 'doc', 'ansible'] | join('/') }}
             10. Calling several filters at once {{ 2 | pow(2) | root(2)*10 }}
         dest: /tmp/filters.txt
