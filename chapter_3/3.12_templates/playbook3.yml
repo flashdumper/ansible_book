@@ -1,0 +1,13 @@
+- hosts: all
+  become: yes
+  tasks:
+
+    - name: Placing the Message Of Day file /etc/motd
+      template:
+        src: motd.j2
+        dest: /etc/motd
+        owner: root
+        group: root
+        mode: o=rw,g=r,o=r
+
+
