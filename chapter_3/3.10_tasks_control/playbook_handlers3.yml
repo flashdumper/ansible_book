@@ -1,0 +1,21 @@
+- hosts: node1.example.com
+  become: yes
+  tasks:
+    - name: Update /etc/ssh/sshd_config file
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^PermitRootLogin.*$'
+        line: 'PermitRootLogin no'
+      notify:
+        - Restart SSH service
+
+    - meta: flush_handlers
+
+    - name: Create user devops
+      user: name=devops
+
+  handlers:
+    - name: Restart SSH service
+      service: name=sshd state=restarted
+
+

@@ -1,0 +1,28 @@
+- hosts: node1.example.com
+  become: yes
+  tasks:
+    - name: Install epel-release repository
+      yum: name=epel-release state=installed
+
+    - name: Install php-fpm, nginx, and mariadb packages
+      yum: name='{{ item }}' state=installed
+      with_items:
+      - php-fpm
+      - nginx
+      - mariadb-server
+      notify:
+      - Complete restarting of a website
+
+  handlers:
+    - name: Restart Web service
+      service: name=nginx state=restarted
+      listen: Complete restarting of a website
+
+    - name: Restart PHP-FPM service
+      service: name=php-fpm state=restarted
+      listen: Complete restarting of a website
+
+    - name: Restart Database
+      service: name=mariadb state=restarted
+      listen: Complete restarting of a website
+
