@@ -1,0 +1,13 @@
+- hosts: all
+  become: yes
+  tasks:
+    - name: Creating accounts
+      user: name='{{ item.key }}' comment='{{ item.value.comment }}' shell='{{ item.value.shell }}'
+      with_dict:
+        devops: 
+            comment: DevOps User
+            shell: /bin/bash
+        operator:
+            comment: Operator Account
+            shell: /bin/sh
+

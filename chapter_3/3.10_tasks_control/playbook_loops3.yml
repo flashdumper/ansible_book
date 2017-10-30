@@ -1,9 +1,6 @@
 - hosts: all
-  become: yes
-  vars:
-    groups: [ 'appdata', 'appcnf', 'appbin' ]
   tasks:
-    - name: Creating accounts
+    - name: Creating empty files
       file:
         path: '/tmp/{{ item[0] }}-{{ item[1] }}.{{ item[2] }}'
         state: touch
