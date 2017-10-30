@@ -1,0 +1,23 @@
+- hosts: node1.example.com
+  become: yes
+  tags:
+  - apache
+  tasks:
+    - name: Install Apache
+      yum: name=httpd state=installed
+      tags:
+      - install
+
+    - name: Set server name
+      lineinfile:
+        path: /etc/httpd/conf/httpd.conf
+        regexp: '^ServerName.*$'
+        line: 'ServerName {{ inventory_hostname }}'
+      tags:
+      - configure
+
+    - name: Restart Apache
+      service: name=httpd state=restarted
+      tags:
+      - restart
+

@@ -1,0 +1,11 @@
+- hosts: all
+  become: yes
+  tasks:
+    - name: Installing packages
+      yum: name='{{ item }}'
+      with_items:
+      - wget
+      - git
+      - tcpdump
+      when: ansible_distribution == 'CentOS'
+

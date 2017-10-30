@@ -1,0 +1,13 @@
+- hosts: all
+  become: yes
+  tasks:
+    - name: Creating accounts
+      user: 
+        name: '{{ item.user }}' 
+        comment: '{{ item["comment"] }}'
+        home: '{{ item.home }}'
+      with_items:
+      - { user: devops, comment: DevOps Account, home: /home/devops }
+      - { user: operator, comment: Operator Account, home: /var/operator }
+      - { user: techadm, comment: Technical Support, home: /home/techadm }
+

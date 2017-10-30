@@ -1,0 +1,14 @@
+- hosts: all
+  become: yes
+  vars:
+    groups: [ 'appdata', 'appcnf', 'appbin' ]
+  tasks:
+    - name: Creating accounts
+      file:
+        path: '/tmp/{{ item[0] }}-{{ item[1] }}.{{ item[2] }}'
+        state: touch
+      with_nested:
+      - [ 'file1', 'file2', 'file3' ]
+      - [ 'one', 'two', 'three' ]
+      - [ 'true', 'false' ]
+
