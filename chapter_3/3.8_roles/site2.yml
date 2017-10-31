@@ -1,0 +1,11 @@
+- hosts: all
+  become: true
+  pre_tasks:
+  - name: Set correct hostname
+    hostname: name='{{ inventory_hostname }}'
+  post_tasks:
+  - name: Add an operator account
+    user: name=operator
+  roles:
+  - wordpress
+
