@@ -1,0 +1,3 @@
+- name: Make sure that Php-Fpm is running
+  service: name=php-fpm state=running enabled=on
+

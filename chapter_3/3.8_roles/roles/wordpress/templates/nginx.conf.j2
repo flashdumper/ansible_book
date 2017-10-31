@@ -19,6 +19,9 @@ http {
     include             /etc/nginx/mime.types;
     default_type        application/octet-stream;
     include /etc/nginx/conf.d/*.conf;
+    upstream php {
+        server 127.0.0.1:9000;
+    }
     server {
         listen       80 default_server;
         listen       [::]:80 default_server;
@@ -32,6 +35,10 @@ http {
         }
         error_page 500 502 503 504 /50x.html;
             location = /50x.html {
+        }
+        location ~* /(?:uploads|files)/.*\.php$ {
+            include /etc/nginx/fastcgi_params;
+            fastcgi_pass php;
         }
     }
 }

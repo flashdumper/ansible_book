@@ -1,5 +1,0 @@
-install_packages: 
- - git
- - tcpdump
- - net-tools
-
