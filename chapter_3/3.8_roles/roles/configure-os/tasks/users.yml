@@ -1,0 +1,8 @@
+- name: Create system accounts
+  user:
+    name: '{{ item.key }}'
+    comment: '{{ item.value.comment }}'
+    home: '{{ item.value.home }}'
+    shell: '{{ item.value.shell }}' 
+  with_dict: '{{ list_users }}'
+

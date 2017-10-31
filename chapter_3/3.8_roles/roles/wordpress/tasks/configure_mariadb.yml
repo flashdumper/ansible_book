@@ -1,0 +1,13 @@
+- name: Make sure that MariaDb server is running
+  service: name='mariadb' state=running enabled=on
+
+- name: Create a database 
+  mysql_db:
+    name: '{{ wordpress_dbname }}'
+    
+- name: Create a database user
+  mysql_user:
+    name: '{{ wordpress_dbuser }}'
+    password: '{{ wordpress_dbpass }}'
+    priv: '{{ wordpress_dbname }}:ALL'
+ 

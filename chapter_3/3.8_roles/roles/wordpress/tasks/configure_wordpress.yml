@@ -1,0 +1,10 @@
+- name: Configure wordpress
+  template:
+    src: wp-config.php.j2
+    dest: /etc/wordpress/wp-config.php
+    owner: root
+    group: apache
+    mode: '0640'
+  notify:
+  - Reload Nginx
+

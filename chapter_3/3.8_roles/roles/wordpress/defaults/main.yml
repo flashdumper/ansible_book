@@ -1,0 +1,12 @@
+install_packages:
+- nginx
+- php-fpm
+- mariadb-server
+- wordpress
+- MySQL-python
+
+
+wordpress_dbname: wordpress
+wordpress_dbuser: wordpress
+wordpress_dbpass: VeRYH3AvYP@$sW0RD
+

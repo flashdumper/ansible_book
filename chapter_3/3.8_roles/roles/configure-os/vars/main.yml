@@ -1,0 +1,14 @@
+list_users:
+  devops:
+    comment: Development Operations Account
+    home: /var/devops
+    shell: /bin/bash
+  appadm:
+    comment: Application Admin Account
+    home: /var/appadm
+    shell: /bin/sh
+  automation:
+    comment: Automating Operations Account
+    home: /dev/null
+    shell: /bin/bash
+
