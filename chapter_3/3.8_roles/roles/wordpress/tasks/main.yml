@@ -1,5 +1,9 @@
+- name: Checking whether a managed host runs CentOS
+  assert:
+    that: ansible_distribution == 'CentOS'
+    msg: This role supports only CentOS
+
 - include_tasks: install.yml
 - include_tasks: configure_nginx.yml
 - include_tasks: configure_mariadb.yml
 - include_tasks: configure_wordpress.yml
-
