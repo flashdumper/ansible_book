@@ -1,0 +1,62 @@
+\tlevelone{Why Git}
+
+At the moment of writing this book, we have been looking for a tool that allows us to share this book solutions, and other related files with our readers. It has to be popular, easy to learn and use, and free to use. We have been using git for several years already, so the choice was very obvious. And for those who is unfamiliar with \specterm{Git}, we hope that you will learn and start using it on a daily basis.
+
+
+
+\tleveltwo{About Git}
+
+\specterm{Git} is a distributed version control system developed as storage for source code and tracking changes. This is absolutely free software distributed under \longterm{General Public License (GPL)}. \specterm{Git} allows a number of people work on same projects independently. 
+
+\specterm{Git} is a very simple yet powerful tool that has been actively used by Developers, Engineering, DevOps and other communities for years. Since \specterm{Git} is not main topic of this book, we are not going to go use and explore \specterm{Git} full functionality, but rather use it to simply share playbooks, roles and other Ansible related files we use in this book. 
+
+
+
+\tleveltwo{Installing Git}
+
+Installing \specterm{Git} is quite easy. Below are 3 examples how to do it on 3 main Operating Systems you might working on. 
+
+\specterm{Git} is available on almost every Linux distributive and also on Solaris, FreeBSD, Windows, Mac OS X and many other systems. Depending on your current OS install Git using a proper way.
+
+
+\shellcmd{MacOS}{\$ brew install git}
+\shellcmd{CentOS}{\$ sudo yum install git}
+\shellcmd{Ubuntu}{\$ sudo apt install git}
+
+\shelloutput{}{Verify that Git is installed on your system}{\$ git --version}
+
+
+
+\tleveltwo{Cloning a Github repository}
+
+
+Download this book repo from github.com. It includes all solutions for all the Chapters of this book. If you feel uncomfortable at any point while reading this book, you can refer to it. The folder structure is quite intuitive, so you should not have any problems finding the right solution.
+
+\shellcmd{}{\$ mkdir repos}
+
+That is what you need from git for this book. We are going to work with git on a few more topics to give you an idea about how you can use it on your daily basis.
+
+
+
+\tleveltwo{Creating an own Git repository}
+
+Get yourself registered on http://github.com. It should be fairly easy and straightforward process. Once you are done:
+\begin{enumerate}
+\item Press “+” and then “New repository” at the top-right corner of github webpage
+\item Specify Repository Name, like “my\_project1”
+\item Leave the rest of the settings by default and then press “Create Repository” button.
+\end{enumerate}
+
+For more information, follow the link \weblink{https://help.github.com/articles/create-a-repo/}
+
+At this point you are ready to clone your own repository. Copy the URL that that should look like this \intextcmd{git clone https}
+
+\shellcmd{}{\$ mkdir repos; cd repos}
+
+\shelloutput{}{Cloning into my\_project1...}
+
+
+
+\tleveltwo{Configuring Git}
+Before you start working with git repositories, we need to define our email and username. This minimal configuration is required to start working with \specterm{Git}:
+

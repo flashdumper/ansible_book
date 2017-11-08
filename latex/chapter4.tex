@@ -1,0 +1,36 @@
+\section{Error handling}
+\subsection{Errors in plays}
+
+Ansible normally has defaults that make sure to check the return codes of commands and modules and it fails fast – forcing an error to be dealt with unless you decide otherwise. Sometimes a command that returns different than 0 isn’t an error. Sometimes a command might not always need to report that it ‘changed’ the remote system. This section describes how to change the default behavior of Ansible for certain tasks so output and error handling behavior is as desired.
+
+\subsection{Ignoring Failed Commands}
+By default, if a task fails, a play is aborted; however, this behavior can be overridden by skipping failed tasks. To do so, the \answord{ignore\_errors} keyword needs to be used in a task.
+
+
+\subsection{Force execution of handlers}
+
+By default, if a task that notifies a handler fails, the handler will be skipped as well. Administrators can override this behavior by using the \answord{force\_handlers} keyword in task. This forces the handler to be called even if the task fails. The following snippet shows hows to use the \answord{force\_handlers} keyword in a task to forcefully execute the handler even if the task fails.
+
+
+\subsection{Override the failed state}
+
+A task itself can succeed, yet administrators may want to mark the task as failed based on specific criteria. To do so, the \answord{failed\_when} keyword can be used with a task. This is often used with modules that execute remote commands and capture the output in a variable. For example, administrators can run a script that outputs an error message and use that message to define the failed state for the task. The following snippet shows how the \answord{failed\_when} keyword can be used in a task.
+
+\subsection{Override the changed state}
+
+When a task updates a managed host, it acquires the changed state; however, if a task does not perform any change on the managed node, handlers are skipped. The \answord{changed\_when} keyword can be used to override the default behavior of what triggers the changed state. For example, if administrators want to restart a service every time a playbook runs, the \answord{changed\_when} keyword can be added to the task. The following snippet shows how a handler can be triggered every time by forcing the changed state.
+
+\subsection{Error handling in blocks}
+In playbooks, blocks are clauses that enclose tasks. Blocks allow for logical grouping of tasks, and can be used to control how tasks are executed. For example, administrators can define a main set of tasks and a set of extra tasks that will only be executed if the first set fails. To do so, blocks in playbooks can be used with three keywords:
+\begin{itemize}
+\item \answord{block}: Defines the main tasks to run
+\item \answord{rescue}: Defines the tasks that will be run if the tasks defined in the block clause fails.
+\item \answord{always}: Defines the tasks that will always run independently of the success or failure of tasks defined in the block and rescue clauses.
+\end{itemize}
+
+The following example shows how to implement a block in a playbook. Even if tasks defined in the block clause fail, tasks defined in the \answord{rescue} and \answord{always} clause will be executed.
+
+\subsection{Aborting the play}
+Sometimes it’s desirable to abort the entire play on failure, not just skip remaining tasks for a host.
+The \answord{any\_errors\_fatal} play option will mark all hosts as failed if any fails, causing an immediate abort
+
