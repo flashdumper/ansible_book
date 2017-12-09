@@ -1,0 +1,25 @@
+Vagrant.configure(2) do |config|
+    config.vm.define "node1" do |node1|
+        node1.vm.box = "centos/7"
+#        node1.vm.network "private_network", ip: "192.168.1.11"
+#        node1.vm.network "forwarded_port", guest: 161, host: 1611, protocol: "udp"
+#        node1.vm.network "forwarded_port", guest: 12000, host: 12001, protocol: "udp"
+#        node1.vm.network "forwarded_port", guest: 80, host: 8081, protocol: "tcp"
+    end
+    config.vm.define "node2" do |node2|
+        node2.vm.box = "centos/7"
+#        node2.vm.network "private_network", ip: "192.168.1.12"
+#        node2.vm.network "forwarded_port", guest: 161, host: 1612, protocol: "udp"
+#        node2.vm.network "forwarded_port", guest: 12000, host: 12002, protocol: "udp"
+#        node2.vm.network "forwarded_port", guest: 80, host: 8082, protocol: "tcp"
+    end
+    config.vm.define "node3" do |node3|
+        node3.vm.box = "centos/7"
+#        node3.vm.network "private_network", ip: "192.168.1.13"
+#        node3.vm.network "forwarded_port", guest: 161, host: 1613, protocol: "udp"
+#        node3.vm.network "forwarded_port", guest: 514, host: 5143, protocol: "udp"
+#        node3.vm.network "forwarded_port", guest: 12000, host: 12003, protocol: "udp"
+#        node3.vm.network "forwarded_port", guest: 80, host: 8083, protocol: "tcp"
+    end
+end
+

@@ -1,3 +1,2 @@
 - include: playbook1.yml
-- include: playbook2.yml
-
+- import_playbook: playbook2.yml

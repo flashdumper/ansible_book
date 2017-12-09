@@ -1,7 +1,8 @@
+---
 - hosts: node1.example.com
+  become: true
+  gather_facts: no 
   tasks:
   
   - name: Set a correct hostname
-    hostname: name='www.example.com'
-    become: yes
-
+    hostname: name='node1.example.com'
