@@ -1,0 +1,9 @@
+- hosts: all
+  become: yes
+  vars:
+    users: user4
+  tasks:
+    - name: Create users on node1.example.com
+      user: name='{{ users }}'
+      when: inventory_hostname == 'node1.example.com'
+

@@ -1,4 +1,4 @@
-- hosts: all
+- hosts: node1.example.com
   become: yes
   tasks:
     - name: Installing packages

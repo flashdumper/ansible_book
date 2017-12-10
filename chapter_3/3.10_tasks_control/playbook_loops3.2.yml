@@ -1,0 +1,10 @@
+- hosts: node1.example.com
+  tasks:
+    - name: Creating empty files
+      file:
+        path: '/tmp/{{ item[0] }}-{{ item[1] }}-{{ item[2] }}'
+        state: touch
+      with_nested:
+      - [ 'level1.1', 'level1.2', 'level1.3' ]
+      - [ 'level2.1', 'level2.2' ]
+      - [ 'level3.1', 'level3.2' ]
