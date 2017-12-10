@@ -3,4 +3,4 @@
 **/*.retry
 **/*.swp
 **/*.log
-
+*.retry

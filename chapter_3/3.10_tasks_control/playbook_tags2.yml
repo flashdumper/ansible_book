@@ -1,4 +1,4 @@
-- hosts: node1.example.com
+- hosts: node2.example.com
   become: yes
   tags:
   - apache
@@ -17,7 +17,7 @@
       - configure
 
     - name: Restart Apache
-      service: name=httpd state=restarted
+      service: name=httpd state=restarted enabled=yes
       tags:
       - restart
 

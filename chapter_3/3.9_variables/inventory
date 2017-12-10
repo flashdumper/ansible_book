@@ -1,6 +1,6 @@
 [hostgroup-1]
-node1.example.com ansible_ssh_port=2202 ansible_ssh_private_key_file='.vagrant/machines/node1.example.com/virtualbox/private_key'
-node2.example.com ansible_ssh_port=2201 ansible_ssh_private_key_file='.vagrant/machines/node2.example.com/virtualbox/private_key'
+node1.example.com ansible_ssh_port=2221 ansible_ssh_private_key_file='.vagrant/machines/node1.example.com/virtualbox/private_key'
+node2.example.com ansible_ssh_port=2222 ansible_ssh_private_key_file='.vagrant/machines/node2.example.com/virtualbox/private_key'
 
 [hostgroup-1:vars]
 ansible_host = 127.0.0.1 
