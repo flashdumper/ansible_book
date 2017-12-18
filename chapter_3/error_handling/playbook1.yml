@@ -1,0 +1,10 @@
+---
+- hosts: all
+  become: true
+  tasks:
+   - yum: name=wrongpackagename state=present
+     ignore_errors: yes
+
+   - name: Installing a correct package
+     yum: name=tcpdump state=present
+

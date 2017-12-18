@@ -1,0 +1,30 @@
+- hosts: node2.example.com
+  become: yes
+  gather_facts: yes
+  tasks:
+    - name: create directory for custom facts
+      file:
+        path:  /etc/ansible/facts.d/
+        recurse: yes
+        state: directory
+
+    - name: Creating custom facts file for custom os release fact
+      lineinfile:
+        path: /etc/ansible/facts.d/{{inventory_hostname}}.fact
+        create: yes
+        regexp: '{{ item.regexp }}'
+        line: '{{ item.line }}'
+      with_items:
+        - { regexp: '\[os_facts\]', line: '[os_facts]'}
+        - { regexp: 'os_release*', line: 'os_release={{ansible_distribution}}'}
+        - { regexp: 'os_version*', line: 'os_version={{ansible_distribution_version}}'}
+        - { regexp: '\[ip_facts\]', line: '[ip_facts]'}
+        - { regexp: 'eth0_ip', line: 'eth0_ip={{ ansible_eth0["ipv4"]["address"] }}'}
+
+
+    - name: do facts module to get latest information
+      setup:
+
+    - name: Printing hostinfo variable
+      debug: msg='{{ ansible_local }}'
+

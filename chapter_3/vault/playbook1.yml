@@ -1,0 +1,8 @@
+- hosts: all
+  become: true
+  tasks: 
+  - name: create user1
+    user: 
+     name: "{{username}}"
+     password: "{{ password | password_hash('sha512') }}"
+

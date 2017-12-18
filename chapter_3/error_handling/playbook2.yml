@@ -1,0 +1,13 @@
+---
+- hosts: all
+  force_handlers: yes
+  become: true
+  tasks:
+    - yum: name=mariadb state=latest
+      notify: restart_database
+
+  handlers:
+    - name: restart_database
+      service:
+        name: mariadb
+        state: restarted
