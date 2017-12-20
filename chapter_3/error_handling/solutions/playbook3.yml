@@ -1,0 +1,15 @@
+---
+- hosts: all
+  force_handlers: yes
+  become: true
+  tasks:
+    - name: run custom script1
+      script: create_users.sh
+      register: command_result
+#      failed_when: "'Password is missing' in command_result.stdout"
+
+    - name: Fail task when the command error output prints FAILED
+      script: std_err.sh
+      register: command_result
+#      failed_when: not (command_result.stderr == 0 or command_result.stderr == 12)
+
