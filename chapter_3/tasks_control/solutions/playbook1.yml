@@ -1,0 +1,12 @@
+- hosts: node1.example.com
+  become: yes
+  tasks:
+    - name: Update /etc/ssh/sshd_config file
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^PermitRootLogin.*$'
+        line: 'PermitRootLogin yes'
+   
+    - name: Restart SSH service
+      service: name=sshd state=restarted
+
