@@ -3,6 +3,6 @@
   tasks:
     - name: Set modified /etc/hosts file
       template:
-        src: hosts2.j2
+        src: ../hosts2.j2
         dest: /etc/hosts
 
